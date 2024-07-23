@@ -1,7 +1,14 @@
 package src.caminito;
 
-import javax.swing.*;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class SplashScreen extends JPanel {
     private JFrame mainFrame;
@@ -13,7 +20,7 @@ public class SplashScreen extends JPanel {
         setPreferredSize(new Dimension(800, 600));
 
         // Configurar la imagen de fondo
-        ImageIcon backgroundImage = new ImageIcon("./img/Elcaminodelsaber.png"); // Cambia el path a tu imagen
+        ImageIcon backgroundImage = new ImageIcon("C:\\Users\\lenovo\\Documents\\GitHub\\camino\\img\\Elcaminodelsaber.png"); // Cambia el path a tu imagen
         JLabel backgroundLabel = new JLabel(backgroundImage);
         add(backgroundLabel, BorderLayout.CENTER);
 
