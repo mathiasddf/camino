@@ -1,12 +1,19 @@
 package src.caminito;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 public class CaminoGame extends JPanel {
+    
     private PlayerPanel player1Panel;
     private PlayerPanel player2Panel;
     private JButton rollDiceButton;
@@ -21,15 +28,14 @@ public class CaminoGame extends JPanel {
         JPanel playerPanels = new JPanel(new GridLayout(2, 1));
 
         // Crear y agregar el panel del tablero y los datos del jugador 1
-        BoardPanel boardPanel1 = new BoardPanel("./img/snake.jpg");
-        player1Panel = new PlayerPanel("Jugador 1", boardPanel1);
+        BoardPanel boardPanel1 = new BoardPanel("C:\\Users\\lenovo\\Downloads\\bosqueFondo.jpg");
+        player1Panel = new PlayerPanel("Jugador 1", boardPanel1 );
         playerPanels.add(player1Panel);
 
         // Crear y agregar el panel del tablero y los datos del jugador 2
-        BoardPanel boardPanel2 = new BoardPanel("./img/snake.jpg");
+        BoardPanel boardPanel2 = new BoardPanel("C:\\Users\\lenovo\\Downloads\\bosqueFondo.jpg");
         player2Panel = new PlayerPanel("Jugador 2", boardPanel2);
         playerPanels.add(player2Panel);
-
         add(playerPanels, BorderLayout.CENTER);
 
         // Botones para lanzar el dado y volver al menú
@@ -85,4 +91,5 @@ public class CaminoGame extends JPanel {
     private int getCurrentPlayerNumber() {
         return player1Turn ? 1 : 2;
     }
+
 }
