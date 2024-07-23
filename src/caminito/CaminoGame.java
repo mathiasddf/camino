@@ -9,10 +9,8 @@ import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 public class CaminoGame extends JPanel {
     
@@ -22,15 +20,7 @@ public class CaminoGame extends JPanel {
     private JButton backToMenuButton;
     private boolean player1Turn = true;
     private final Random random = new Random();
-    //atributos que no se utilizan
-    private final int[] PLAYER_START_POS = {1, 1}; // Posición inicial del jugador
-    private final int[] PLAYER_POS = new int[2]; 
-    private int currentPlayer = 1; // Jugador actual
-    private boolean isRolling = false; // Indica si se está tirando el dado
-    private int diceRoll = 0; // Resultado del dado
-    private JLabel diceLabel;
-    private Timer diceTimer; // Temporizador para la animación del dado
-     //###
+
     public CaminoGame() {
         setLayout(new BorderLayout());
 
