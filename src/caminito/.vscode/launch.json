@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Caminito",
+            "request": "launch",
+            "mainClass": "src.caminito.Caminito",
+            "projectName": ""
+        },
+        {
+            "type": "jdk",
+            "request": "launch",
+            "name": "Launch Java App"
+        },
+        {
+            "type": "java",
+            "name": "Launch Java Program",
+            "request": "launch"
+        }
+    ]
+}
