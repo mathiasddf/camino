@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'mysql:mysql-connector-java:8.0.29'
+}
+
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+application {
+    // Asegúrate de que esta clase sea la clase principal de tu aplicación
+    mainClass = 'caminito.Caminito'  // Reemplaza 'caminito.Caminito' con la ruta correcta a tu clase principal
+}
