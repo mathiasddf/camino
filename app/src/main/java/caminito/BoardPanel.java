@@ -233,7 +233,7 @@ public class BoardPanel extends JPanel {
     }
 
     private void showVictoryMessage() {
-        String message = playerName + ", GANASTE, Quieres jugar otra vez?";
+        String message = playerName + " GANASTE, Quieres jugar otra vez?";
         Object[] options = {"Si", "No"};
         int response = JOptionPane.showOptionDialog(this, message, "Victoria", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         
