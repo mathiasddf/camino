@@ -29,7 +29,7 @@ public class SplashScreen extends JPanel {
         setPreferredSize(new Dimension(800, 600));
 
         // Configurar la imagen de fondo
-        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/img/Elcaminodelsaber.png"));
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/img/elcamino.jpeg"));
         Image originalImage = originalIcon.getImage();
 
         // Aplicar opacidad a la imagen
