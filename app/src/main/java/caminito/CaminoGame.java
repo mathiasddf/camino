@@ -18,7 +18,7 @@ public class CaminoGame extends JPanel {
     private JButton rollDiceButton;
     private boolean player1Turn = true;
 
-    public CaminoGame() {
+    public CaminoGame(String player1Name, String player2Name) {
         setLayout(new BorderLayout());
 
         // Crear panel para los datos de los jugadores y tableros
@@ -26,12 +26,12 @@ public class CaminoGame extends JPanel {
 
         // Crear y agregar el panel del tablero y los datos del jugador 1
         BoardPanel boardPanel1 = new BoardPanel("img/fondoTablero.jpeg","BLUE");
-        player1Panel = new PlayerPanel("Jugador 1", boardPanel1);
+        player1Panel = new PlayerPanel(player1Name, boardPanel1, "Jugador 1");
         playerPanels.add(player1Panel);
 
         // Crear y agregar el panel del tablero y los datos del jugador 2
         BoardPanel boardPanel2 = new BoardPanel("img/fondoTablero.jpeg", "RED");
-        player2Panel = new PlayerPanel("Jugador 2", boardPanel2);
+        player2Panel = new PlayerPanel(player2Name, boardPanel2, "Jugador 2");
         playerPanels.add(player2Panel);
         add(playerPanels, BorderLayout.CENTER);
 
@@ -54,9 +54,6 @@ public class CaminoGame extends JPanel {
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(rollDiceButton);
         add(buttonPanel, BorderLayout.SOUTH);
-        
-
-        
     }
     
 }

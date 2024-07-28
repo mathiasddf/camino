@@ -5,12 +5,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class PlayerRegistrationScreen extends JPanel {
 
     private JTextField player1NameField;
     private JTextField player2NameField;
     private JFrame mainFrame;
+
+    private static final String URL = "jdbc:mysql://localhost:3306/caminito";
+    private static final String USER = "root";  
+    private static final String PASSWORD = "";  
 
     public PlayerRegistrationScreen(JFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -21,7 +29,7 @@ public class PlayerRegistrationScreen extends JPanel {
         Image originalImage = originalIcon.getImage();
 
         // Aplicar opacidad a la imagen
-        Image transparentImage = setImageOpacity(originalImage, 0.5f); // Cambia la opacidad aquí
+        Image transparentImage = setImageOpacity(originalImage, 0.5f); 
         ImageIcon transparentIcon = new ImageIcon(transparentImage);
 
         // Redimensionar la imagen
@@ -31,11 +39,10 @@ public class PlayerRegistrationScreen extends JPanel {
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
         JLabel backgroundLabel = new JLabel(scaledIcon);
-        backgroundLabel.setLayout(new GridBagLayout()); // Usar GridBagLayout para centrar los botones
+        backgroundLabel.setLayout(new GridBagLayout()); 
         add(backgroundLabel, BorderLayout.CENTER);
 
-        
-        backgroundLabel.setLayout(new GridBagLayout());  // Cambiar el layout para añadir otros componentes
+        backgroundLabel.setLayout(new GridBagLayout());  
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);  // Espaciado interno
@@ -93,24 +100,23 @@ public class PlayerRegistrationScreen extends JPanel {
                             "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     // Almacenar los nombres en la base de datos
-                    JugadorDAO jugadorDAO = new JugadorDAO();
-                    jugadorDAO.agregarJugador(player1Name);
-                    jugadorDAO.agregarJugador(player2Name);
+                    agregarJugador(player1Name);
+                    agregarJugador(player2Name);
 
                     // Cambiar a la pantalla del juego
-                    showGame();
+                    showGame(player1Name,player2Name);
                 }
             }
         });
     }
 
-    private void showGame() {
+    private void showGame(String player1Name, String player2Name) {
         mainFrame.getContentPane().removeAll();
-        mainFrame.add(new CaminoGame(), BorderLayout.CENTER); // Mostrar el panel del juego
+        mainFrame.add(new CaminoGame(player1Name, player2Name), BorderLayout.CENTER); // Mostrar el panel del juego
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-
+    
     // Método para ajustar la opacidad de una imagen
     private Image setImageOpacity(Image img, float opacity) {
         BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -119,5 +125,18 @@ public class PlayerRegistrationScreen extends JPanel {
         g2d.drawImage(img, 0, 0, null);
         g2d.dispose();
         return bufferedImage;
+    }
+
+    // Método para agregar un jugador a la base de datos
+    private void agregarJugador(String nombre) {
+        String sql = "INSERT INTO usuarios (nombre) VALUES (?)";
+        
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
