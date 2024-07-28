@@ -7,8 +7,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.awt.RenderingHints;
+import java.awt.FontMetrics;
+import java.awt.BorderLayout;
 import java.net.URL;
 
 public class BoardPanel extends JPanel {

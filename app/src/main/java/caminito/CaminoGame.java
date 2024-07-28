@@ -7,8 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
 
 
 public class CaminoGame extends JPanel {
