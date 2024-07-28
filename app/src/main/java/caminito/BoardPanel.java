@@ -10,7 +10,7 @@ import java.awt.RenderingHints;
 import java.io.IOException;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
+import javax.imageio.ImageIO;   
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,8 +31,10 @@ public class BoardPanel extends JPanel {
     private int diceRoll = 0; // Resultado del dado
     private JLabel diceLabel;
     private String playerName = "Jugador"; // Valor predeterminado
+    private Color playerColor; // Color del jugador
 
-    public BoardPanel(String boardImagePath) {
+    public BoardPanel(String boardImagePath, String playerColorString) {
+        this.playerColor = convertColor(playerColorString);
         try {
             // Cargar la imagen usando ClassLoader
             URL imageUrl = getClass().getClassLoader().getResource(boardImagePath);
@@ -102,8 +104,18 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawPlayers(Graphics g) {
-        g.setColor(Color.BLUE);
+        g.setColor(playerColor); 
         g.fillOval(PLAYER_POS[1] * TILE_SIZE + 5, PLAYER_POS[0] * TILE_SIZE + 5, TILE_SIZE - 10, TILE_SIZE - 10);
+    }
+    private Color convertColor(String colorString) {
+        switch (colorString.toLowerCase()) {
+            case "red":
+                return Color.RED;
+            case "blue":
+                return Color.BLUE;
+            default:
+                return Color.GRAY; // Color predeterminado si no coincide
+        }
     }
 
     public void rollDice() {
@@ -154,6 +166,10 @@ public class BoardPanel extends JPanel {
                     boolean isCorrect = Question.showQuestion(question);
                     if (isCorrect) {
                         JOptionPane.showMessageDialog(this, "¡Respuesta correcta!", "Correcto", JOptionPane.INFORMATION_MESSAGE);
+                        // Verifica si el jugador ha ganado
+                        if (newPosition == camino.length - 1) {
+                            showVictoryMessage();
+                        }
                     } else {
                         JOptionPane.showMessageDialog(this, "Respuesta incorrecta. Retrocediendo.", "Incorrecto", JOptionPane.WARNING_MESSAGE);
                         // Retrocede el jugador a la posición anterior
@@ -163,11 +179,17 @@ public class BoardPanel extends JPanel {
                     }
                 }
             }
-        
-            // Verifica si el jugador ha ganado
-            if (newPosition == camino.length - 1) {
-                System.out.println("¡Jugador gana!");
-                // Aquí puedes agregar lógica para mostrar un mensaje de victoria o reiniciar el juego
+        }
+        private void showVictoryMessage() {
+            int response = JOptionPane.showConfirmDialog(this, "¡Has ganado! ¿Quieres jugar otra vez?", "Victoria", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                // Reiniciar el juego
+                PLAYER_POS[0] = PLAYER_START_POS[0];
+                PLAYER_POS[1] = PLAYER_START_POS[1];
+                repaint();
+            } else {
+                // Volver al menú principal
+                // Aquí puedes agregar la lógica para volver al menú principal
             }
         }
     

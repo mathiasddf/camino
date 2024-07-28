@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -77,6 +78,7 @@ public class Question {
             while (rs.next()) {
                 options.add(rs.getString("alternativa"));
             }
+            Collections.shuffle(options); // Desordenar las alternativas
             return options.toArray(new String[0]);
         } catch (SQLException e) {
             e.printStackTrace();
