@@ -1,23 +1,14 @@
 package caminito;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.io.IOException;
 import java.util.Random;
-
-import javax.imageio.ImageIO;   
-
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
+import java.awt.*;
 import java.awt.image.BufferedImage;
-
 import java.net.URL;
 
 public class BoardPanel extends JPanel {
@@ -32,9 +23,22 @@ public class BoardPanel extends JPanel {
     private JLabel diceLabel;
     private String playerName = "Jugador"; // Valor predeterminado
     private Color playerColor; // Color del jugador
+    private GameWinListener gameWinListener;
+    private JFrame mainFrame;
 
-    public BoardPanel(String boardImagePath, String playerColorString) {
+    public interface GameWinListener {
+        void onGameWin(String playerName);
+    }
+
+    public void setGameWinListener(GameWinListener listener) {
+        this.gameWinListener = listener;
+    }
+
+    public BoardPanel(String boardImagePath, String playerColorString, String playerName, JFrame mainFrame) {
         this.playerColor = convertColor(playerColorString);
+        this.playerName = playerName;
+        this.mainFrame = mainFrame;
+
         try {
             // Cargar la imagen usando ClassLoader
             URL imageUrl = getClass().getClassLoader().getResource(boardImagePath);
@@ -118,82 +122,6 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    public void rollDice() {
-        if (!isRolling) {
-            isRolling = true;
-            Random random = new Random();
-            diceRoll = random.nextInt(6) + 1;
-            movePlayer(); // Mueve al jugador inmediatamente después de lanzar el dado
-            isRolling = false; // Resetea la bandera
-        }
-    }
-
-    
-        public void movePlayer() {
-            int[][] camino = {
-                {1, 1}, {2, 1}, {3, 1}, {3, 2}, {3, 3}, {3, 4}, {3, 5}, {2, 5},
-                {1, 5}, {0, 5}, {0, 6}, {0, 7}, {0, 8}, {1, 8}, {2, 8}, {2, 7}, {3, 7},
-                {4, 7}, {4, 8}, {4, 9}, {4, 10}, {3, 10}, {2, 10}, {2, 11}, {2, 12}, {1, 12}, {1, 13}
-            };
-        
-            // Encuentra la posición actual del jugador
-            int currentPosition = 0;
-            for (int i = 0; i < camino.length; i++) {
-                if (PLAYER_POS[0] == camino[i][0] && PLAYER_POS[1] == camino[i][1]) {
-                    currentPosition = i;
-                    break;
-                }
-            }
-        
-            // Calcula la nueva posición
-            int newPosition = currentPosition + diceRoll;
-            if (newPosition >= camino.length) {
-                newPosition = camino.length - 1; // No exceder el final del tablero
-            }
-        
-            // Guarda la posición antes de mover
-            int[] previousPosition = {PLAYER_POS[0], PLAYER_POS[1]};
-        
-            // Mueve al jugador a la nueva posición
-            PLAYER_POS[0] = camino[newPosition][0];
-            PLAYER_POS[1] = camino[newPosition][1];
-            repaint(); // Redibuja el panel después de mover al jugador
-        
-            // Verifica si la nueva posición tiene una pregunta
-            if (newPosition > 0 && newPosition < camino.length) {
-                Question question = Question.getQuestionForTile(newPosition + 1); // Ajustar el número de casilla según tu lógica
-                if (question != null) {
-                    boolean isCorrect = Question.showQuestion(question);
-                    if (isCorrect) {
-                        JOptionPane.showMessageDialog(this, "¡Respuesta correcta!", "Correcto", JOptionPane.INFORMATION_MESSAGE);
-                        // Verifica si el jugador ha ganado
-                        if (newPosition == camino.length - 1) {
-                            showVictoryMessage();
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Respuesta incorrecta. Retrocediendo.", "Incorrecto", JOptionPane.WARNING_MESSAGE);
-                        // Retrocede el jugador a la posición anterior
-                        PLAYER_POS[0] = previousPosition[0];
-                        PLAYER_POS[1] = previousPosition[1];
-                        repaint(); // Redibuja el panel después de mover al jugador
-                    }
-                }
-            }
-        }
-        private void showVictoryMessage() {
-            int response = JOptionPane.showConfirmDialog(this, "¡Has ganado! ¿Quieres jugar otra vez?", "Victoria", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
-                // Reiniciar el juego
-                PLAYER_POS[0] = PLAYER_START_POS[0];
-                PLAYER_POS[1] = PLAYER_START_POS[1];
-                repaint();
-            } else {
-                // Volver al menú principal
-                // Aquí puedes agregar la lógica para volver al menú principal
-            }
-        }
-    
-
     private void drawNumbers(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setFont(new Font("Arial", Font.BOLD, 24));
@@ -234,4 +162,94 @@ public class BoardPanel extends JPanel {
         g2d.dispose();
     }
 
+    //FUNCIONAMIENTO DEL TABLERO
+    public void rollDice() {
+        if (!isRolling) {
+            isRolling = true;
+            Random random = new Random();
+            diceRoll = random.nextInt(6) + 1;
+            movePlayer(); // Mueve al jugador inmediatamente después de lanzar el dado
+            isRolling = false; // Resetea la bandera
+        }
+    }
+
+    public void movePlayer() {
+        int[][] camino = {
+            {1, 1}, {2, 1}, {3, 1}, {3, 2}, {3, 3}, {3, 4}, {3, 5}, {2, 5},
+            {1, 5}, {0, 5}, {0, 6}, {0, 7}, {0, 8}, {1, 8}, {2, 8}, {2, 7}, {3, 7},
+            {4, 7}, {4, 8}, {4, 9}, {4, 10}, {3, 10}, {2, 10}, {2, 11}, {2, 12}, {1, 12}, {1, 13}
+        };
+    
+        // Encuentra la posición actual del jugador
+        int currentPosition = 0;
+        for (int i = 0; i < camino.length; i++) {
+            if (PLAYER_POS[0] == camino[i][0] && PLAYER_POS[1] == camino[i][1]) {
+                currentPosition = i;
+                break;
+            }
+        }
+    
+        // Calcula la nueva posición
+        int newPosition = currentPosition + diceRoll;
+        if (newPosition >= camino.length) {
+            newPosition = camino.length - 1; // No exceder el final del tablero
+        }
+    
+        // Guarda la posición antes de mover
+        int[] previousPosition = {PLAYER_POS[0], PLAYER_POS[1]};
+    
+        // Mueve al jugador a la nueva posición
+        PLAYER_POS[0] = camino[newPosition][0];
+        PLAYER_POS[1] = camino[newPosition][1];
+        repaint(); // Redibuja el panel después de mover al jugador
+    
+        // Verifica si la nueva posición tiene una pregunta
+        if (newPosition > 0 && newPosition < camino.length) {
+            Question question = Question.getQuestionForTile(newPosition + 1); // Ajustar el número de casilla según tu lógica
+            if (question != null) {
+                boolean isCorrect = Question.showQuestion(question);
+                if (isCorrect) {
+                    JOptionPane.showMessageDialog(this, "Respuesta correcta", "Correcto", JOptionPane.INFORMATION_MESSAGE);
+                    // Verifica si el jugador ha ganado
+                    if (newPosition == camino.length - 1) {
+                        showVictoryMessage();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Respuesta incorrecta. Retrocediendo.", "Incorrecto", JOptionPane.WARNING_MESSAGE);
+                    // Retrocede el jugador a la posición anterior
+                    PLAYER_POS[0] = previousPosition[0];
+                    PLAYER_POS[1] = previousPosition[1];
+                    repaint(); // Redibuja el panel después de mover al jugador
+                }
+            }
+        }
+    }
+
+    private void showVictoryMessage() {
+        String message = playerName + ", GANASTE, Quieres jugar otra vez?";
+        Object[] options = {"Si", "No"};
+        int response = JOptionPane.showOptionDialog(this, message, "Victoria", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        
+        if (response == JOptionPane.YES_OPTION) {
+            // Reiniciar el juego
+            if (gameWinListener != null) {
+                gameWinListener.onGameWin(playerName);
+            }
+        } else {
+            showMainMenu();
+        }
+    }
+    public void resetBoard() {
+        PLAYER_POS[0] = PLAYER_START_POS[0];
+        PLAYER_POS[1] = PLAYER_START_POS[1];
+        repaint();
+    }
+    private void showMainMenu() {
+        mainFrame.getContentPane().removeAll();
+        mainFrame.add(new SplashScreen(mainFrame), BorderLayout.CENTER);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+
+    
 }

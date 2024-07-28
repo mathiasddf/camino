@@ -12,7 +12,6 @@ public class PlayerPanel extends JPanel {
     private final int[] PLAYER_START_POS = {1, 1}; // Posición inicial del jugador
     private final int[] PLAYER_ONE_POS = new int[2]; // Posición actual del jugador 1
     private final int[] PLAYER_TWO_POS = new int[2]; // Posición actual del jugador 2
-
     private String playerName;
 
     public PlayerPanel(String playerName, BoardPanel boardPanel, String playerNumber) {

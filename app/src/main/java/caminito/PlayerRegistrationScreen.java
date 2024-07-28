@@ -112,7 +112,7 @@ public class PlayerRegistrationScreen extends JPanel {
 
     private void showGame(String player1Name, String player2Name) {
         mainFrame.getContentPane().removeAll();
-        mainFrame.add(new CaminoGame(player1Name, player2Name), BorderLayout.CENTER); // Mostrar el panel del juego
+        mainFrame.add(new CaminoGame(player1Name, player2Name, mainFrame), BorderLayout.CENTER); // Mostrar el panel del juego
         mainFrame.revalidate();
         mainFrame.repaint();
     }

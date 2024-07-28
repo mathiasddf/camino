@@ -71,7 +71,7 @@ public class Question {
     public static String[] getOptionsForQuestion(int questionId) {
         String query = "SELECT alternativa FROM alternativas WHERE pregunta_id = ?";
         try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, questionId);
             ResultSet rs = pstmt.executeQuery();
             List<String> options = new ArrayList<>();
