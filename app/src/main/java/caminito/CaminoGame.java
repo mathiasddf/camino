@@ -4,10 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
+import java.awt.Color;
+import java.awt.Font;
 
 
 public class CaminoGame extends JPanel {
@@ -36,9 +40,17 @@ public class CaminoGame extends JPanel {
         playerPanels.add(player2Panel);
         add(playerPanels, BorderLayout.CENTER);
 
-        // Botón para lanzar el dado
+        // Configuración del botón
         rollDiceButton = new JButton("Lanzar dado");
-        rollDiceButton.setPreferredSize(new Dimension(150, 20));
+        rollDiceButton.setPreferredSize(new Dimension(150, 40)); // Tamaño del botón
+        rollDiceButton.setFont(new Font("Arial", Font.BOLD, 16)); // Fuente del texto
+        rollDiceButton.setForeground(Color.WHITE); // Color del texto
+        rollDiceButton.setBackground(new Color(0, 150, 0)); // Color de fondo (verde)
+        rollDiceButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.BLACK, 2), // Borde negro de 2 píxeles
+                BorderFactory.createEmptyBorder(5, 10, 5, 10) // Espaciado interno
+        ));
+        rollDiceButton.setFocusPainted(false);
         rollDiceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
